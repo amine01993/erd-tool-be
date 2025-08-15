@@ -1,0 +1,5 @@
+{
+    "app": "npx ts-node --prefer-ts-exts src/Launcher.ts",
+    "profile": "amine-console",
+    "output": "cdk.out"   
+}

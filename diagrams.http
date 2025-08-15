@@ -1,0 +1,35 @@
+
+@url = https://7idcj1esf8.execute-api.us-east-1.amazonaws.com/prod
+@locationId = ceef3cae-b105-46de-81b0-d6ac64854bb6
+@token = eyJraWQiOiJhM1wvdVdDQThRVFZmNk9PbnBSbStIXC9cL2Yrck94ZGNXQ3VucFhkb0Rpb0YwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhNDQ4MzQ0OC03MDAxLTcwMTgtZDc2ZS1iMWZmMTBiNTc2ZDEiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbnMiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfTFhrb1JyTW9aIiwiY29nbml0bzp1c2VybmFtZSI6InNwYSIsIm9yaWdpbl9qdGkiOiIzMWZkZTFhYi1kZjRmLTRjMGUtYTgyNi1iYjdiYTYwMzAxNGMiLCJjb2duaXRvOnJvbGVzIjpbImFybjphd3M6aWFtOjozMTQxNDYzMTQyMjk6cm9sZVwvQXV0aFN0YWNrLUNvZ25pdG9BZG1pblJvbGU0QzEwRkJBNC1kV201UU1rVkpmS1QiXSwiYXVkIjoiMjhrZGU4c2Qxb2x0azRsMzMzZWZ2MDhmZWgiLCJldmVudF9pZCI6Ijk2NDIwZjA5LTVlNzItNDIxNS05M2ViLWQyYTk1NmY5NGM0MSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzU0OTQ3MDg1LCJleHAiOjE3NTQ5NTA2ODUsImlhdCI6MTc1NDk0NzA4NSwianRpIjoiNmViM2I5NzMtYWVlYi00ZDgxLWE5MjYtYzVmNjI4NjdhZGY5IiwiZW1haWwiOiJtcmFtaW5lMzY0QGdtYWlsLmNvbSJ9.VIAN9XiOnrWBnOOPLeGiSq28AhTZn4Fe1OuIEmwO_v7zmPkIP7iCpx6qIA2YGzOdznhfRWGCFSyC8gfuJFyTwB24NNxVcFT2zH-1NrEiTfozLBBQd4ihigZv-pkO0T_GOdoWK9gE5cBPzkxAQ1zjiiGirrYuVmy1LfT9wLc9sZE8s4ucLVG5i8Sy6QxPLoDUV5iH1ylBny_p45sP25ZvUPJLB4gUzlECM104wanJWArhbId4xSMUCtDf7pLgCcUqC_vWq8DCwLoyvVL5mUC-2MeEksQ6O3ec0S30naL3tyQDVG4vvE5NvJviHzXGRgk4QGHnxiOXgbLpy9WiPptQ5g
+
+GET {{url}}/spaces
+Authorization: {{token}}
+###
+
+GET {{url}}/spaces?id={{locationId}}
+Authorization: {{token}}
+###
+
+POST {{url}}/spaces
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "location": "Montreal",
+    "name": "A city for Gamers"
+}
+###
+
+PUT {{url}}/spaces?id={{locationId}}
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "location": "Manchester2"
+}
+###
+
+DELETE {{url}}/spaces?id={{locationId}}
+Authorization: {{token}}
+###
