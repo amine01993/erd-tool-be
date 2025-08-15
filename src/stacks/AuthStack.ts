@@ -48,8 +48,8 @@ export class AuthStack extends Stack {
             userVerification: {
                 emailSubject: "Email verification, Thanks for signing up!",
                 emailBody: `Thanks for signing up to our awesome app! 
-                    To verify your email click on this link {##Verify Your Email##}`,
-                emailStyle: VerificationEmailStyle.LINK,
+                    To verify your email please enter this code: {####}`,
+                emailStyle: VerificationEmailStyle.CODE,
             },
             signInPolicy: {
                 allowedFirstAuthFactors: { password: true },
@@ -77,6 +77,7 @@ export class AuthStack extends Stack {
                     custom: true,
                     userPassword: true,
                     userSrp: true,
+                    adminUserPassword: true,
                 },
                 accessTokenValidity: Duration.hours(1),
                 idTokenValidity: Duration.hours(1),
