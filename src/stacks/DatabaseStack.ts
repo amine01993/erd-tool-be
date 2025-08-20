@@ -16,6 +16,10 @@ export class DatabaseStack extends Stack {
                 name: "id",
                 type: AttributeType.STRING,
             },
+            sortKey: {
+                name: "userId",
+                type: AttributeType.STRING,
+            },
             contributorInsights: true,
             tableName: `DiagramsTable-${suffix}`,
             pointInTimeRecoverySpecification: {

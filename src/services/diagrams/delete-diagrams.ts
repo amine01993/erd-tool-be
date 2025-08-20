@@ -15,22 +15,18 @@ export async function deleteDiagram(
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: { S: diagramId },
+                userId: { S: userId },
             },
             UpdateExpression: "SET #deletedAt = :deletedAt",
-            ConditionExpression: "#userId = :userId",
             ExpressionAttributeNames: {
-                "#userId": "userId",
                 "#deletedAt": "deletedAt",
             },
             ExpressionAttributeValues: {
-                ":userId": { S: userId },
                 ":deletedAt": { S: new Date().toISOString() },
             },
             ReturnValues: "ALL_NEW",
         })
     );
-
-    console.log("deleteDiagram", {userId, diagramId, result})
 
     return {
         statusCode: 200,

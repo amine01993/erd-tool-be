@@ -18,18 +18,10 @@ async function handler(
     event: APIGatewayProxyEvent,
     context: Context
 ): Promise<APIGatewayProxyResult> {
-    // let message: string;
     let response: APIGatewayProxyResult;
 
-    // Raw token from HTTP headers
-    const authHeader =
-        event.headers?.Authorization || event.headers?.authorization;
-
-    // Cognito user claims (decoded JWT)
     const claims = event.requestContext?.authorizer?.claims;
-    const userId = "123456";
-
-    console.log("handler", {authHeader, claims})
+    const userId = claims?.sub;
 
     try {
         switch (event.httpMethod) {

@@ -30,6 +30,7 @@ export class LambdaStack extends Stack {
             environment: {
                 TABLE_NAME: props.diagramsTable.tableName,
             },
+            memorySize: 256,
             tracing: Tracing.ACTIVE,
             timeout: Duration.minutes(1),
         });
@@ -39,7 +40,6 @@ export class LambdaStack extends Stack {
                 effect: Effect.ALLOW,
                 resources: [props.diagramsTable.tableArn],
                 actions: [
-                    // "dynamodb:DeleteItem",
                     "dynamodb:UpdateItem",
                     "dynamodb:PutItem",
                     "dynamodb:GetItem",

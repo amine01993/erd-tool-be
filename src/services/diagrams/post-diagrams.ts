@@ -1,7 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyResult } from "aws-lambda";
-import { v4 } from "uuid";
 import { validateErdDiagram } from "../helpers/validation";
 
 export async function addDiagram(
@@ -12,14 +11,21 @@ export async function addDiagram(
     const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
     const item = JSON.parse(body);
-    item.userId = userId;
 
     validateErdDiagram(item);
 
     const result = await ddbDocClient.send(
         new PutCommand({
             TableName: process.env.TABLE_NAME,
-            Item: item,
+            Item: {
+                id: item.id,
+                userId: userId,
+                name: item.name,
+                history: item.history,
+                viewport: item.viewport,
+                createAt: new Date().toISOString(),
+                lastUpdate: new Date().toISOString(),
+            },
         })
     );
 

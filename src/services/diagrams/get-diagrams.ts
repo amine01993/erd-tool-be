@@ -14,12 +14,14 @@ export async function findDiagrams(
         new ScanCommand({
             TableName: process.env.TABLE_NAME,
             ProjectionExpression: "#id, #name, #viewport, #lastUpdate",
-            FilterExpression: "#userId = :userId",
+            FilterExpression: "#userId = :userId AND attribute_not_exists(#deletedAt)",
             ExpressionAttributeNames: {
                 "#id": "id",
                 "#name": "name",
                 "#viewport": "viewport",
                 "#lastUpdate": "lastUpdate",
+                "#userId": "userId",
+                "#deletedAt": "deletedAt",
             },
             ExpressionAttributeValues: {
                 ":userId": {
@@ -31,7 +33,7 @@ export async function findDiagrams(
     const unmashalledItems = result.Items?.map((item) => unmarshall(item));
 
     return {
-        statusCode: 201,
+        statusCode: 200,
         body: JSON.stringify(unmashalledItems),
     };
 }

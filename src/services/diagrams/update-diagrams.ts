@@ -22,31 +22,27 @@ export async function updateDiagram(
 
     if ("viewport" in item) {
         updates.push("#viewport = :viewport");
-        names["#viewport"] = ":viewport";
+        names["#viewport"] = "viewport";
         values[":viewport"] = item["viewport"];
     }
     
     if ("history" in item) {
         updates.push("#history = :history");
-        names["#history"] = ":history";
+        names["#history"] = "history";
         values[":history"] = item["history"];
     }
 
     updates.push("#lastUpdate = :lastUpdate");
-    names["#lastUpdate"] = ":lastUpdate";
+    names["#lastUpdate"] = "lastUpdate";
     values[":lastUpdate"] = new Date().toISOString();
-
-    updates.push("#userId = :userId");
-    names["#userId"] = ":userId";
-    values[":userId"] = userId;
 
     const updateResult = await ddbClient.send(
         new UpdateCommand({
             TableName: process.env.TABLE_NAME,
             Key: {
                 id: item.id,
+                userId,
             },
-            ConditionExpression: "#userId = :userId",
             UpdateExpression: `SET ${updates.join(", ")}`,
             ExpressionAttributeValues: values,
             ExpressionAttributeNames: names,

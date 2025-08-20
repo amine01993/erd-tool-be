@@ -1,35 +1,39 @@
 
-@url = https://7idcj1esf8.execute-api.us-east-1.amazonaws.com/prod
-@locationId = ceef3cae-b105-46de-81b0-d6ac64854bb6
-@token = eyJraWQiOiJhM1wvdVdDQThRVFZmNk9PbnBSbStIXC9cL2Yrck94ZGNXQ3VucFhkb0Rpb0YwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhNDQ4MzQ0OC03MDAxLTcwMTgtZDc2ZS1iMWZmMTBiNTc2ZDEiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbnMiXSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfTFhrb1JyTW9aIiwiY29nbml0bzp1c2VybmFtZSI6InNwYSIsIm9yaWdpbl9qdGkiOiIzMWZkZTFhYi1kZjRmLTRjMGUtYTgyNi1iYjdiYTYwMzAxNGMiLCJjb2duaXRvOnJvbGVzIjpbImFybjphd3M6aWFtOjozMTQxNDYzMTQyMjk6cm9sZVwvQXV0aFN0YWNrLUNvZ25pdG9BZG1pblJvbGU0QzEwRkJBNC1kV201UU1rVkpmS1QiXSwiYXVkIjoiMjhrZGU4c2Qxb2x0azRsMzMzZWZ2MDhmZWgiLCJldmVudF9pZCI6Ijk2NDIwZjA5LTVlNzItNDIxNS05M2ViLWQyYTk1NmY5NGM0MSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzU0OTQ3MDg1LCJleHAiOjE3NTQ5NTA2ODUsImlhdCI6MTc1NDk0NzA4NSwianRpIjoiNmViM2I5NzMtYWVlYi00ZDgxLWE5MjYtYzVmNjI4NjdhZGY5IiwiZW1haWwiOiJtcmFtaW5lMzY0QGdtYWlsLmNvbSJ9.VIAN9XiOnrWBnOOPLeGiSq28AhTZn4Fe1OuIEmwO_v7zmPkIP7iCpx6qIA2YGzOdznhfRWGCFSyC8gfuJFyTwB24NNxVcFT2zH-1NrEiTfozLBBQd4ihigZv-pkO0T_GOdoWK9gE5cBPzkxAQ1zjiiGirrYuVmy1LfT9wLc9sZE8s4ucLVG5i8Sy6QxPLoDUV5iH1ylBny_p45sP25ZvUPJLB4gUzlECM104wanJWArhbId4xSMUCtDf7pLgCcUqC_vWq8DCwLoyvVL5mUC-2MeEksQ6O3ec0S30naL3tyQDVG4vvE5NvJviHzXGRgk4QGHnxiOXgbLpy9WiPptQ5g
+@url = https://9nnhrbiki6.execute-api.us-east-1.amazonaws.com/prod/
+@Id = 42ZxXYS
+@token = eyJraWQiOiJyM0xsVVB1T3VESFByVndSTndcL3Bhb0k0MG5PSUtKNUd4Y1ZlM1dHSVoxOD0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiNGY4ODRkOC1kMGMxLTcwYzctYWQxYS04OWZiZDhjMGVjOGEiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfdGROd2NsSFFKIiwiY29nbml0bzp1c2VybmFtZSI6ImI0Zjg4NGQ4LWQwYzEtNzBjNy1hZDFhLTg5ZmJkOGMwZWM4YSIsIm9yaWdpbl9qdGkiOiIwYTYyNzA1OC0wZTgzLTQ2ZGMtOGRjMS1lZjZlOThmMTQyYzAiLCJhdWQiOiI0MWtjcTk1MmU1bWEzdGpoZjYyNnM2bW05cCIsImV2ZW50X2lkIjoiYmMyOTg1NTEtZjA2YS00NTU5LWE0MzQtZDA2ZmZkYjcyNzI1IiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE3NTUyOTQzNzAsIm5hbWUiOiJBbWluZSBFcnIiLCJleHAiOjE3NTU3MjMxMDMsImlhdCI6MTc1NTcxOTUwMywianRpIjoiZGJmZjFjYWItNGQzZi00MWE5LTk5NDctNDFjNWM3ZTRkZjkzIiwiZW1haWwiOiJtcmFtaW5lMzY0QGdtYWlsLmNvbSJ9.OcT4RNT-d9C3LY6PuDIcp1ZBs_hyduWFQzbbydkQjYwPq5uwZL0zQxOJ4jQO4h2WXcfkpKldV0JKQEIp-v0rHvIhshnb11rmBUGUKg15HSyW1lPcOiAypwbzSkgnMWwJU_DjwKDZsiXEipCYrhIqBe8QYe07eTIyhLdebdIDtH8RBz9nBHSv5LCOrSXq-xgNt_v6S34eQdbSXf7P_ufphuaqYXYBJwbZiGcHLCfOr2RGoKIctiQHQyLgmJs-uNMIxhjIDapLpfW2_ofnI6OyvjSPK73LgxbHKnXLo0aUzVwnuXCtqPQFoICZscSUrJv_GACqmBvV7rIxSSSqImsuPQ
 
-GET {{url}}/spaces
+GET {{url}}/diagrams
 Authorization: {{token}}
 ###
 
-GET {{url}}/spaces?id={{locationId}}
+GET {{url}}/diagrams?id={{Id}}
 Authorization: {{token}}
 ###
 
-POST {{url}}/spaces
-Authorization: {{token}}
-Content-Type: application/json
-
-{
-    "location": "Montreal",
-    "name": "A city for Gamers"
-}
-###
-
-PUT {{url}}/spaces?id={{locationId}}
+POST {{url}}/diagrams
 Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "location": "Manchester2"
+    
 }
 ###
 
-DELETE {{url}}/spaces?id={{locationId}}
+PUT {{url}}/diagrams
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "id":"1",
+    "viewport":{
+        "x":369.6760435571688,
+        "y":201.02813067150635,
+        "zoom":1.1270417422867514
+    }    
+}
+###
+
+DELETE {{url}}/diagrams?id={{Id}}
 Authorization: {{token}}
 ###
