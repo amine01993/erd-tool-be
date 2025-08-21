@@ -13,11 +13,17 @@ export async function updateDiagram(
     const names = {};
     const values = {};
 
-    if (!("id" in item) || (!("viewport" in item) && !("history" in item))) {
+    if (!("id" in item) || (!("name" in item) && !("viewport" in item) && !("history" in item))) {
         return {
             statusCode: 400,
             body: JSON.stringify("Incorrect arguments!"),
         };
+    }
+
+    if ("name" in item) {
+        updates.push("#name = :name");
+        names["#name"] = "name";
+        values[":name"] = item["name"];
     }
 
     if ("viewport" in item) {
