@@ -8,19 +8,36 @@ import {
     ResourceOptions,
     RestApi,
 } from "aws-cdk-lib/aws-apigateway";
-import { IUserPool } from "aws-cdk-lib/aws-cognito";
+import {
+    CfnIdentityPool,
+    CfnIdentityPoolRoleAttachment,
+    IUserPool,
+} from "aws-cdk-lib/aws-cognito";
+import {
+    Effect,
+    FederatedPrincipal,
+    PolicyStatement,
+    Role,
+} from "aws-cdk-lib/aws-iam";
 import { Construct } from "constructs";
 
 interface ApiStackProps extends StackProps {
     diagramsLambdaIntegration: LambdaIntegration;
     userPool: IUserPool;
+    identityPool: CfnIdentityPool;
 }
 
 export class ApiStack extends Stack {
+    public api: RestApi;
+    public unAuthenticatedRole: Role;
+    public authenticatedRole: Role;
+
     constructor(scope: Construct, id: string, props: ApiStackProps) {
         super(scope, id, props);
 
-        const api = new RestApi(this, "DiagramsApi");
+        this.createAndAttachRoles(props);
+
+        this.api = new RestApi(this, "DiagramsApi");
 
         const authorizer = new CognitoUserPoolsAuthorizer(
             this,
@@ -30,8 +47,80 @@ export class ApiStack extends Stack {
                 identitySource: "method.request.header.Authorization",
             }
         );
-        authorizer._attachToApi(api);
+        authorizer._attachToApi(this.api);
 
+        this.addResources(props, authorizer);
+
+        const apiArn = `arn:aws:execute-api:${this.region}:${this.account}:${this.api.restApiId}`;
+
+        this.unAuthenticatedRole.addToPolicy(
+            new PolicyStatement({
+                effect: Effect.ALLOW,
+                actions: ["execute-api:Invoke"],
+                resources: [
+                    `${apiArn}/*/GET/diagramsForGuests`,
+                    `${apiArn}/*/POST/diagramsForGuests`,
+                    `${apiArn}/*/PUT/diagramsForGuests`,
+                    `${apiArn}/*/DELETE/diagramsForGuests`,
+                    `${apiArn}/*/OPTIONS/*`,
+                ],
+            })
+        );
+    }
+
+    createAndAttachRoles(props: ApiStackProps) {
+        this.unAuthenticatedRole = new Role(
+            this,
+            "CognitoDefaultUnauthenticatedRole",
+            {
+                assumedBy: new FederatedPrincipal(
+                    "cognito-identity.amazonaws.com",
+                    {
+                        StringEquals: {
+                            "cognito-identity.amazonaws.com:aud":
+                                props.identityPool.ref,
+                        },
+                        "ForAnyValue:StringLike": {
+                            "cognito-identity.amazonaws.com:amr":
+                                "unauthenticated",
+                        },
+                    },
+                    "sts:AssumeRoleWithWebIdentity"
+                ),
+            }
+        );
+
+        this.authenticatedRole = new Role(
+            this,
+            "CognitoDefaultAuthenticatedRole",
+            {
+                assumedBy: new FederatedPrincipal(
+                    "cognito-identity.amazonaws.com",
+                    {
+                        StringEquals: {
+                            "cognito-identity.amazonaws.com:aud":
+                                props.identityPool.ref,
+                        },
+                        "ForAnyValue:StringLike": {
+                            "cognito-identity.amazonaws.com:amr":
+                                "authenticated",
+                        },
+                    },
+                    "sts:AssumeRoleWithWebIdentity"
+                ),
+            }
+        );
+
+        new CfnIdentityPoolRoleAttachment(this, "DiagramsRolesAttachment", {
+            identityPoolId: props.identityPool.ref,
+            roles: {
+                authenticated: this.authenticatedRole.roleArn,
+                unauthenticated: this.unAuthenticatedRole.roleArn,
+            },
+        });
+    }
+
+    addResources(props: ApiStackProps, authorizer: CognitoUserPoolsAuthorizer) {
         const optionsWithAuth: MethodOptions = {
             authorizationType: AuthorizationType.COGNITO,
             authorizer: {
@@ -42,11 +131,22 @@ export class ApiStack extends Stack {
         const optionsWithCors: ResourceOptions = {
             defaultCorsPreflightOptions: {
                 allowOrigins: Cors.ALL_ORIGINS,
-                allowMethods: Cors.ALL_METHODS
-            }
-        }
-
-        const diagramsResource = api.root.addResource("diagrams", optionsWithCors);
+                allowMethods: Cors.ALL_METHODS,
+                allowHeaders: [
+                    "Content-Type",
+                    "Authorization",
+                    "X-Amz-Content-Sha256",
+                    "X-Amz-Date",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "Access-Control-Allow-Origin",
+                ],
+            },
+        };
+        const diagramsResource = this.api.root.addResource(
+            "diagrams",
+            optionsWithCors
+        );
         diagramsResource.addMethod(
             "GET",
             props.diagramsLambdaIntegration,
@@ -66,6 +166,39 @@ export class ApiStack extends Stack {
             "DELETE",
             props.diagramsLambdaIntegration,
             optionsWithAuth
+        );
+
+        const diagramsResourceForGuests = this.api.root.addResource(
+            "diagramsForGuests",
+            optionsWithCors
+        );
+        diagramsResourceForGuests.addMethod(
+            "GET",
+            props.diagramsLambdaIntegration,
+            {
+                authorizationType: AuthorizationType.IAM,
+            }
+        );
+        diagramsResourceForGuests.addMethod(
+            "POST",
+            props.diagramsLambdaIntegration,
+            {
+                authorizationType: AuthorizationType.IAM,
+            }
+        );
+        diagramsResourceForGuests.addMethod(
+            "PUT",
+            props.diagramsLambdaIntegration,
+            {
+                authorizationType: AuthorizationType.IAM,
+            }
+        );
+        diagramsResourceForGuests.addMethod(
+            "DELETE",
+            props.diagramsLambdaIntegration,
+            {
+                authorizationType: AuthorizationType.IAM,
+            }
         );
     }
 }

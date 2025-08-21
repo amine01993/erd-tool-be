@@ -21,7 +21,10 @@ async function handler(
     let response: APIGatewayProxyResult;
 
     const claims = event.requestContext?.authorizer?.claims;
-    const userId = claims?.sub;
+    const identity = event.requestContext?.identity;
+    // ? Authenticated userId : Guest Id
+    const userId = claims ? claims?.sub : identity.cognitoIdentityId;
+    // console.log("requestContext", {userId, event});
 
     try {
         switch (event.httpMethod) {

@@ -18,6 +18,7 @@ const lambdaStack = new LambdaStack(app, "DiagramsLambdaStack", {
 new ApiStack(app, "DiagramsApiStack", {
     diagramsLambdaIntegration: lambdaStack.diagramsLambdaIntegration,
     userPool: authStack.userPool,
+    identityPool: authStack.identityPool,
 });
 
 new MonitorStack(app, 'DiagramsMonitorStack')
