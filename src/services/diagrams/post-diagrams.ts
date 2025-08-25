@@ -14,18 +14,21 @@ export async function addDiagram(
 
     validateErdDiagram(item);
 
+    const newItem = {
+        id: item.id,
+        userId: userId,
+        name: item.name,
+        history: item.history,
+        viewport: item.viewport,
+        createAt: new Date().toISOString(),
+        lastUpdate: new Date().toISOString(),
+        deletedAt: item.deletedAt ? new Date().toISOString() : undefined,
+    };
+
     const result = await ddbDocClient.send(
         new PutCommand({
             TableName: process.env.TABLE_NAME,
-            Item: {
-                id: item.id,
-                userId: userId,
-                name: item.name,
-                history: item.history,
-                viewport: item.viewport,
-                createAt: new Date().toISOString(),
-                lastUpdate: new Date().toISOString(),
-            },
+            Item: newItem,
         })
     );
 
