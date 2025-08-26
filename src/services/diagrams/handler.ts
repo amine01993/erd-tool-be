@@ -6,11 +6,11 @@ import {
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { captureAWSv3Client } from "aws-xray-sdk-core";
 import { addCorsHeader } from "../../Utils";
-import { findDiagram, findDiagrams } from "./get-diagrams";
+import { findDeletedDiagrams, findDiagram, findDiagrams } from "./get-diagrams";
 import { addDiagram } from "./post-diagrams";
-import { updateDiagram } from "./update-diagrams";
+import { recoverDiagram, updateDiagram } from "./update-diagrams";
 import { MissingFieldError } from "../helpers/validation";
-import { deleteDiagram } from "./delete-diagrams";
+import { deleteDiagram, deleteDiagramPermanently } from "./delete-diagrams";
 
 const ddbClient = captureAWSv3Client(new DynamoDBClient({}));
 
@@ -24,7 +24,6 @@ async function handler(
     const identity = event.requestContext?.identity;
     // ? Authenticated userId : Guest Id
     const userId = claims ? claims?.sub : identity.cognitoIdentityId;
-    // console.log("requestContext", {userId, event});
 
     try {
         switch (event.httpMethod) {
@@ -35,6 +34,11 @@ async function handler(
                 ) {
                     const diagramId = event.queryStringParameters["id"];
                     response = await findDiagram(ddbClient, userId, diagramId);
+                } else if (
+                    event.queryStringParameters &&
+                    "deleted" in event.queryStringParameters
+                ) {
+                    response = await findDeletedDiagrams(ddbClient, userId);
                 } else {
                     response = await findDiagrams(ddbClient, userId);
                 }
@@ -48,24 +52,41 @@ async function handler(
                 response = postResponse;
                 break;
             case "PUT":
-                const putResponse = await updateDiagram(
-                    ddbClient,
-                    userId,
-                    event.body
-                );
-                response = putResponse;
+                if (
+                    event.queryStringParameters &&
+                    "id" in event.queryStringParameters &&
+                    "recover" in event.queryStringParameters
+                ) {
+                    const diagramId = event.queryStringParameters["id"];
+                    response = await recoverDiagram(
+                        ddbClient,
+                        userId,
+                        diagramId
+                    );
+                } else {
+                    response = await updateDiagram(
+                        ddbClient,
+                        userId,
+                        event.body
+                    );
+                }
                 break;
             case "DELETE":
                 if (
                     event.queryStringParameters &&
                     "id" in event.queryStringParameters
                 ) {
+                    const isPermanent =
+                        "perma" in event.queryStringParameters &&
+                        Boolean(event.queryStringParameters["perma"]);
                     const diagramId = event.queryStringParameters["id"];
-                    response = await deleteDiagram(
-                        ddbClient,
-                        userId,
-                        diagramId
-                    );
+                    response = isPermanent
+                        ? await deleteDiagramPermanently(
+                              ddbClient,
+                              userId,
+                              diagramId
+                          )
+                        : await deleteDiagram(ddbClient, userId, diagramId);
                 }
                 break;
             default:

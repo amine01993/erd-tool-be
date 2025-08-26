@@ -7,13 +7,15 @@ export async function updateDiagram(
     userId: string,
     body: string
 ): Promise<APIGatewayProxyResult> {
-
     const item = JSON.parse(body);
     const updates = [];
     const names = {};
     const values = {};
 
-    if (!("id" in item) || (!("name" in item) && !("viewport" in item) && !("history" in item))) {
+    if (
+        !("id" in item) ||
+        (!("name" in item) && !("viewport" in item) && !("history" in item))
+    ) {
         return {
             statusCode: 400,
             body: JSON.stringify("Incorrect arguments!"),
@@ -31,7 +33,7 @@ export async function updateDiagram(
         names["#viewport"] = "viewport";
         values[":viewport"] = item["viewport"];
     }
-    
+
     if ("history" in item) {
         updates.push("#history = :history");
         names["#history"] = "history";
@@ -42,6 +44,8 @@ export async function updateDiagram(
     names["#lastUpdate"] = "lastUpdate";
     values[":lastUpdate"] = new Date().toISOString();
 
+    names["#deletedAt"] = "deletedAt";
+
     const updateResult = await ddbClient.send(
         new UpdateCommand({
             TableName: process.env.TABLE_NAME,
@@ -50,9 +54,35 @@ export async function updateDiagram(
                 userId,
             },
             UpdateExpression: `SET ${updates.join(", ")}`,
+            ConditionExpression: "attribute_not_exists(#deletedAt)",
             ExpressionAttributeValues: values,
             ExpressionAttributeNames: names,
             ReturnValues: "UPDATED_NEW",
+        })
+    );
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(updateResult.Attributes),
+    };
+}
+
+export async function recoverDiagram(
+    ddbClient: DynamoDBClient,
+    userId: string,
+    id: string
+): Promise<APIGatewayProxyResult> {
+    const updateResult = await ddbClient.send(
+        new UpdateCommand({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+                id,
+                userId,
+            },
+            UpdateExpression: `REMOVE #deletedAt`,
+            ExpressionAttributeNames: {
+                "#deletedAt": "deletedAt",
+            },
         })
     );
 

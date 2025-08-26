@@ -1,4 +1,5 @@
 import {
+    DeleteItemCommand,
     DynamoDBClient,
     UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
@@ -9,7 +10,6 @@ export async function deleteDiagram(
     userId: string,
     diagramId: string
 ): Promise<APIGatewayProxyResult> {
-
     const result = await ddbClient.send(
         new UpdateItemCommand({
             TableName: process.env.TABLE_NAME,
@@ -30,6 +30,33 @@ export async function deleteDiagram(
 
     return {
         statusCode: 200,
-        body: JSON.stringify(`Diagram with id ${diagramId} is deleted`),
+        body: JSON.stringify(`Diagram with id ${diagramId} is deleted!`),
+    };
+}
+
+export async function deleteDiagramPermanently(
+    ddbClient: DynamoDBClient,
+    userId: string,
+    diagramId: string
+): Promise<APIGatewayProxyResult> {
+    const result = await ddbClient.send(
+        new DeleteItemCommand({
+            TableName: process.env.TABLE_NAME,
+            Key: {
+                id: { S: diagramId },
+                userId: { S: userId },
+            },
+            ConditionExpression: "attribute_exists(#deletedAt)",
+            ExpressionAttributeNames: {
+                "#deletedAt": "deletedAt",
+            },
+        })
+    );
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(
+            `Diagram with id ${diagramId} is deleted permanently!`
+        ),
     };
 }

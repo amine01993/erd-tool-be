@@ -14,7 +14,8 @@ export async function findDiagrams(
         new ScanCommand({
             TableName: process.env.TABLE_NAME,
             ProjectionExpression: "#id, #name, #viewport, #lastUpdate",
-            FilterExpression: "#userId = :userId AND attribute_not_exists(#deletedAt)",
+            FilterExpression:
+                "#userId = :userId AND attribute_not_exists(#deletedAt)",
             ExpressionAttributeNames: {
                 "#id": "id",
                 "#name": "name",
@@ -64,4 +65,38 @@ export async function findDiagram(
             body: JSON.stringify(`Diagram with id ${diagramId} not found!`),
         };
     }
+}
+
+export async function findDeletedDiagrams(
+    ddbClient: DynamoDBClient,
+    userId: string
+): Promise<APIGatewayProxyResult> {
+    const result = await ddbClient.send(
+        new ScanCommand({
+            TableName: process.env.TABLE_NAME,
+            ProjectionExpression:
+                "#id, #name, #viewport, #lastUpdate, #deletedAt",
+            FilterExpression:
+                "#userId = :userId AND attribute_exists(#deletedAt)",
+            ExpressionAttributeNames: {
+                "#id": "id",
+                "#name": "name",
+                "#viewport": "viewport",
+                "#lastUpdate": "lastUpdate",
+                "#userId": "userId",
+                "#deletedAt": "deletedAt",
+            },
+            ExpressionAttributeValues: {
+                ":userId": {
+                    S: userId,
+                },
+            },
+        })
+    );
+    const unmashalledItems = result.Items?.map((item) => unmarshall(item));
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(unmashalledItems),
+    };
 }

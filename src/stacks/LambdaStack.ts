@@ -20,13 +20,7 @@ export class LambdaStack extends Stack {
         const diagramsLambda = new NodejsFunction(this, "DiagramsLambda", {
             runtime: Runtime.NODEJS_20_X,
             handler: "handler",
-            entry: join(
-                __dirname,
-                "..",
-                "services",
-                "diagrams",
-                "handler.ts"
-            ),
+            entry: join(__dirname, "..", "services", "diagrams", "handler.ts"),
             environment: {
                 TABLE_NAME: props.diagramsTable.tableName,
             },
@@ -40,6 +34,7 @@ export class LambdaStack extends Stack {
                 effect: Effect.ALLOW,
                 resources: [props.diagramsTable.tableArn],
                 actions: [
+                    "dynamodb:DeleteItem",
                     "dynamodb:UpdateItem",
                     "dynamodb:PutItem",
                     "dynamodb:GetItem",
