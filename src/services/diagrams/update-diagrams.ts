@@ -79,9 +79,10 @@ export async function recoverDiagram(
                 id,
                 userId,
             },
-            UpdateExpression: `REMOVE #deletedAt`,
+            UpdateExpression: `REMOVE #deletedAt, #ttl`,
             ExpressionAttributeNames: {
                 "#deletedAt": "deletedAt",
+                "#ttl": "ttl",
             },
         })
     );

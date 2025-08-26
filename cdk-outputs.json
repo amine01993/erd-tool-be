@@ -1,4 +1,11 @@
 {
+  "DiagramsAuthStack": {
+    "DiagramsUserPoolId": "us-east-1_tdNwclHQJ",
+    "DiagramsIdentityPoolId": "us-east-1:b1aa2184-6d16-45cd-ad04-43e84ef4ff29",
+    "ExportsOutputFnGetAttDiagramsUserPool7F9FAE4DArn8FF90D19": "arn:aws:cognito-idp:us-east-1:314146314229:userpool/us-east-1_tdNwclHQJ",
+    "ExportsOutputRefDiagramsIdentityPool61E25201": "us-east-1:b1aa2184-6d16-45cd-ad04-43e84ef4ff29",
+    "DiagramsUserPoolClientId": "41kcq952e5ma3tjhf626s6mm9p"
+  },
   "DiagramsDataStack": {
     "ExportsOutputFnGetAttDiagramsTable00CCDB5DArn1B46FBAB": "arn:aws:dynamodb:us-east-1:314146314229:table/DiagramsTable-0e3bb289c72b",
     "DiagramsTableName": "DiagramsTable-0e3bb289c72b",
@@ -6,13 +13,6 @@
   },
   "DiagramsLambdaStack": {
     "ExportsOutputFnGetAttDiagramsLambdaED2CB310Arn4A415F1B": "arn:aws:lambda:us-east-1:314146314229:function:DiagramsLambdaStack-DiagramsLambdaED2CB310-TSDuBot7gTfu"
-  },
-  "DiagramsAuthStack": {
-    "DiagramsUserPoolId": "us-east-1_tdNwclHQJ",
-    "DiagramsIdentityPoolId": "us-east-1:b1aa2184-6d16-45cd-ad04-43e84ef4ff29",
-    "ExportsOutputFnGetAttDiagramsUserPool7F9FAE4DArn8FF90D19": "arn:aws:cognito-idp:us-east-1:314146314229:userpool/us-east-1_tdNwclHQJ",
-    "ExportsOutputRefDiagramsIdentityPool61E25201": "us-east-1:b1aa2184-6d16-45cd-ad04-43e84ef4ff29",
-    "DiagramsUserPoolClientId": "41kcq952e5ma3tjhf626s6mm9p"
   },
   "DiagramsApiStack": {
     "DiagramsApiEndpoint53B52E75": "https://9nnhrbiki6.execute-api.us-east-1.amazonaws.com/prod/"

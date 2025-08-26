@@ -17,12 +17,14 @@ export async function deleteDiagram(
                 id: { S: diagramId },
                 userId: { S: userId },
             },
-            UpdateExpression: "SET #deletedAt = :deletedAt",
+            UpdateExpression: "SET #deletedAt = :deletedAt, #ttl = :ttl",
             ExpressionAttributeNames: {
                 "#deletedAt": "deletedAt",
+                "#ttl": "ttl",
             },
             ExpressionAttributeValues: {
                 ":deletedAt": { S: new Date().toISOString() },
+                ":ttl": { N: String(Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30) }, // 30 days
             },
             ReturnValues: "ALL_NEW",
         })

@@ -26,6 +26,7 @@ export class DatabaseStack extends Stack {
                 pointInTimeRecoveryEnabled: true,
                 recoveryPeriodInDays: 3,
             },
+            timeToLiveAttribute: "ttl",
         });
 
         new CfnOutput(this, "DiagramsTableName", {
