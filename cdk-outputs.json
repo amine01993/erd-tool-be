@@ -9,12 +9,17 @@
   "DiagramsDataStack": {
     "ExportsOutputFnGetAttDiagramsTable00CCDB5DArn1B46FBAB": "arn:aws:dynamodb:us-east-1:314146314229:table/DiagramsTable-0e3bb289c72b",
     "DiagramsTableName": "DiagramsTable-0e3bb289c72b",
+    "DiagramsFeedbackTableName": "DiagramsFeedbackTable-0e3bb289c72b",
+    "ExportsOutputRefDiagramsFeedbackTable20FF40AF52A3056A": "DiagramsFeedbackTable-0e3bb289c72b",
+    "ExportsOutputFnGetAttDiagramsFeedbackTable20FF40AFArn7BDE22BB": "arn:aws:dynamodb:us-east-1:314146314229:table/DiagramsFeedbackTable-0e3bb289c72b",
     "ExportsOutputRefDiagramsTable00CCDB5DA232E29E": "DiagramsTable-0e3bb289c72b"
   },
   "DiagramsLambdaStack": {
+    "ExportsOutputFnGetAttDiagramsFeedbackLambda55DC6628ArnE82DE826": "arn:aws:lambda:us-east-1:314146314229:function:DiagramsLambdaStack-DiagramsFeedbackLambda55DC6628-OzBnWkSFsAZW",
     "ExportsOutputFnGetAttDiagramsLambdaED2CB310Arn4A415F1B": "arn:aws:lambda:us-east-1:314146314229:function:DiagramsLambdaStack-DiagramsLambdaED2CB310-TSDuBot7gTfu"
   },
   "DiagramsApiStack": {
-    "DiagramsApiEndpoint53B52E75": "https://9nnhrbiki6.execute-api.us-east-1.amazonaws.com/prod/"
+    "DiagramsApiEndpoint53B52E75": "https://9nnhrbiki6.execute-api.us-east-1.amazonaws.com/prod/",
+    "DiagramsFeedbackApiEndpoint02F771EC": "https://1qb3r4fde3.execute-api.us-east-1.amazonaws.com/prod/"
   }
 }

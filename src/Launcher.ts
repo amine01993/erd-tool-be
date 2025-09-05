@@ -7,19 +7,21 @@ import { MonitorStack } from "./stacks/MonitorStack";
 
 const app = new App();
 
-const authStack = new AuthStack(app, 'DiagramsAuthStack');
+const authStack = new AuthStack(app, "DiagramsAuthStack");
 
 const dataStack = new DatabaseStack(app, "DiagramsDataStack");
 
 const lambdaStack = new LambdaStack(app, "DiagramsLambdaStack", {
     diagramsTable: dataStack.diagramsTable,
+    diagramsFeedbackTable: dataStack.diagramsFeedbackTable,
 });
 
 new ApiStack(app, "DiagramsApiStack", {
     diagramsLambdaIntegration: lambdaStack.diagramsLambdaIntegration,
+    diagramsFeedbackLambdaIntegration:
+        lambdaStack.diagramsFeedbackLambdaIntegration,
     userPool: authStack.userPool,
     identityPool: authStack.identityPool,
 });
 
-new MonitorStack(app, 'DiagramsMonitorStack')
-
+new MonitorStack(app, "DiagramsMonitorStack");

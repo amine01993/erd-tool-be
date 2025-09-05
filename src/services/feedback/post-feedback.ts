@@ -1,28 +1,29 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { APIGatewayProxyResult } from "aws-lambda";
-import { validateErdDiagram } from "../helpers/validation";
+import { validateFeedback } from "../helpers/validation";
+import { sendFeedbackNotification } from "../emails/feedback-notification";
 
-export async function addDiagram(
+export async function addFeedback(
     ddbClient: DynamoDBClient,
     userId: string,
-    body: string
+    body: string,
+    template: string
 ): Promise<APIGatewayProxyResult> {
     const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
     const item = JSON.parse(body);
 
-    validateErdDiagram(item);
+    validateFeedback(item);
 
     const newItem = {
         id: item.id,
         userId: userId,
         name: item.name,
-        history: item.history,
-        viewport: item.viewport,
+        email: item.email,
+        message: item.message,
         createdAt: new Date().toISOString(),
         lastUpdate: new Date().toISOString(),
-        deletedAt: item.deletedAt ? new Date().toISOString() : undefined,
     };
 
     const result = await ddbDocClient.send(
@@ -31,6 +32,14 @@ export async function addDiagram(
             Item: newItem,
         })
     );
+
+    try {
+        await sendFeedbackNotification({ feedback: newItem, template });
+    }
+    catch (error) {
+        console.error("Error sending feedback notification email:", error);
+    }
+
 
     return {
         statusCode: 201,

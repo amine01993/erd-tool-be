@@ -10,7 +10,7 @@ export interface DiagramData {
     id: string;
     name: string;
     viewport?: { x: number; y: number; zoom: number };
-    createAt: string;
+    createdAt: string;
     lastUpdate: string;
     loaded?: boolean;
     selected?: boolean;

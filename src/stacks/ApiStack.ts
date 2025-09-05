@@ -23,12 +23,14 @@ import { Construct } from "constructs";
 
 interface ApiStackProps extends StackProps {
     diagramsLambdaIntegration: LambdaIntegration;
+    diagramsFeedbackLambdaIntegration: LambdaIntegration;
     userPool: IUserPool;
     identityPool: CfnIdentityPool;
 }
 
 export class ApiStack extends Stack {
     public api: RestApi;
+    public feedbackApi: RestApi;
     public unAuthenticatedRole: Role;
     public authenticatedRole: Role;
 
@@ -63,6 +65,33 @@ export class ApiStack extends Stack {
                     `${apiArn}/*/PUT/diagramsForGuests`,
                     `${apiArn}/*/DELETE/diagramsForGuests`,
                     `${apiArn}/*/OPTIONS/*`,
+                ],
+            })
+        );
+
+        this.feedbackApi = new RestApi(this, "DiagramsFeedbackApi");
+
+        const feedbackAuthorizer = new CognitoUserPoolsAuthorizer(
+            this,
+            "DiagramsFeedbackApiAuthorizer",
+            {
+                cognitoUserPools: [props.userPool],
+                identitySource: "method.request.header.Authorization",
+            }
+        );
+        feedbackAuthorizer._attachToApi(this.feedbackApi);
+
+        this.addFeedbackResources(props, feedbackAuthorizer);
+
+        const feedbackApiArn = `arn:aws:execute-api:${this.region}:${this.account}:${this.feedbackApi.restApiId}`;
+
+        this.unAuthenticatedRole.addToPolicy(
+            new PolicyStatement({
+                effect: Effect.ALLOW,
+                actions: ["execute-api:Invoke"],
+                resources: [
+                    `${feedbackApiArn}/*/POST/feedbackForGuests`,
+                    `${feedbackApiArn}/*/OPTIONS/*`,
                 ],
             })
         );
@@ -196,6 +225,52 @@ export class ApiStack extends Stack {
         diagramsResourceForGuests.addMethod(
             "DELETE",
             props.diagramsLambdaIntegration,
+            {
+                authorizationType: AuthorizationType.IAM,
+            }
+        );
+    }
+
+    addFeedbackResources(props: ApiStackProps, authorizer: CognitoUserPoolsAuthorizer) {
+        const optionsWithAuth: MethodOptions = {
+            authorizationType: AuthorizationType.COGNITO,
+            authorizer: {
+                authorizerId: authorizer.authorizerId,
+            },
+        };
+
+        const optionsWithCors: ResourceOptions = {
+            defaultCorsPreflightOptions: {
+                allowOrigins: Cors.ALL_ORIGINS,
+                allowMethods: Cors.ALL_METHODS,
+                allowHeaders: [
+                    "Content-Type",
+                    "Authorization",
+                    "X-Amz-Content-Sha256",
+                    "X-Amz-Date",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "Access-Control-Allow-Origin",
+                ],
+            },
+        };
+        const feedbackResource = this.feedbackApi.root.addResource(
+            "feedback",
+            optionsWithCors
+        );
+        feedbackResource.addMethod(
+            "POST",
+            props.diagramsFeedbackLambdaIntegration,
+            optionsWithAuth
+        );
+
+        const feedbackResourceForGuests = this.feedbackApi.root.addResource(
+            "feedbackForGuests",
+            optionsWithCors
+        );
+        feedbackResourceForGuests.addMethod(
+            "POST",
+            props.diagramsFeedbackLambdaIntegration,
             {
                 authorizationType: AuthorizationType.IAM,
             }

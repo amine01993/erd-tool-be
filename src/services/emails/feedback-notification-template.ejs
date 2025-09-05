@@ -1,0 +1,91 @@
+<html>
+    <body
+        style="
+            margin: 0;
+            padding: 30px 50px;
+            font-family: Arial, sans-serif;
+            background-color: #f6f9fc;
+        "
+    >
+        <h1>New Feedback</h1>
+        <table
+            style="
+                width: 100%;
+                background: #ffffff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border-collapse: collapse;
+            "
+        >
+            <tr>
+                <td
+                    style="
+                        border: 1px solid black;
+                        padding: 10px 20px;
+                        width: 150px;
+                    "
+                >
+                    <strong>Feedback Id</strong>
+                </td>
+                <td style="border: 1px solid black; padding: 10px 20px">
+                    <%= feedbackId %>
+                </td>
+            </tr>
+            <tr>
+                <td
+                    style="
+                        border: 1px solid black;
+                        padding: 10px 20px;
+                        width: 150px;
+                    "
+                >
+                    <strong>Name</strong>
+                </td>
+                <td style="border: 1px solid black; padding: 10px 20px">
+                    <%= name %>
+                </td>
+            </tr>
+            <tr>
+                <td
+                    style="
+                        border: 1px solid black;
+                        padding: 10px 20px;
+                        width: 150px;
+                    "
+                >
+                    <strong>Email</strong>
+                </td>
+                <td style="border: 1px solid black; padding: 10px 20px">
+                    <%= email %>
+                </td>
+            </tr>
+            <tr>
+                <td
+                    style="
+                        border: 1px solid black;
+                        padding: 10px 20px;
+                        width: 150px;
+                    "
+                >
+                    <strong>Create At</strong>
+                </td>
+                <td style="border: 1px solid black; padding: 10px 20px">
+                    <%= createdAt %>
+                </td>
+            </tr>
+            <tr>
+                <td
+                    style="
+                        border: 1px solid black;
+                        padding: 10px 20px;
+                        width: 150px;
+                    "
+                >
+                    <strong>Message</strong>
+                </td>
+                <td style="border: 1px solid black; padding: 10px 20px">
+                    <%- message %>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
