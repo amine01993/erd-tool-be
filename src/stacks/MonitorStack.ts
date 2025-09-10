@@ -122,7 +122,7 @@ export class MonitorStack extends Stack {
                     "diagram-error-handler.ts"
                 ),
                 environment: {
-                    FROM_EMAIL: "err.amine93@gmail.com",
+                    FROM_EMAIL: "codebox@amineerrafii.com",
                     TO_EMAIL: "err.amine93@gmail.com",
                     ERROR_TEMPLATE: errorTemplate,
                 },

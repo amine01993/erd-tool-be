@@ -1,8 +1,10 @@
 import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import {
     AccountRecovery,
+    BooleanAttribute,
     CfnIdentityPool,
     FeaturePlan,
+    StringAttribute,
     UserPool,
     UserPoolClient,
     VerificationEmailStyle,
@@ -54,6 +56,10 @@ export class AuthStack extends Stack {
                     required: false,
                     mutable: true,
                 },
+            },
+            customAttributes: {
+                aiSuggestionsEnabled: new BooleanAttribute({ mutable: true }),
+                theme: new StringAttribute({ mutable: true }),
             },
             accountRecovery: AccountRecovery.EMAIL_ONLY,
         });

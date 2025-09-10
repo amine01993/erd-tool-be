@@ -74,7 +74,7 @@ export class LambdaStack extends Stack {
                 ),
                 environment: {
                     TABLE_NAME: props.diagramsFeedbackTable.tableName,
-                    FROM_EMAIL: "err.amine93@gmail.com",
+                    FROM_EMAIL: "codebox@amineerrafii.com",
                     TO_EMAIL: "err.amine93@gmail.com",
                     FEEDBACK_TEMPLATE: feedbackTemplate,
                 },
