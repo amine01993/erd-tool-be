@@ -60,6 +60,7 @@ export class AuthStack extends Stack {
             customAttributes: {
                 aiSuggestionsEnabled: new BooleanAttribute({ mutable: true }),
                 theme: new StringAttribute({ mutable: true }),
+                guideShown: new BooleanAttribute({ mutable: true }),
             },
             accountRecovery: AccountRecovery.EMAIL_ONLY,
         });
